@@ -1,1 +1,2 @@
-# my-didact
+### 参考
+[didact](https://github.com/pomber/didact)

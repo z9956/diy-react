@@ -1,0 +1,19 @@
+{
+  "name": "my-didact",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/z9956/my-didact.git"
+  },
+  "author": "z9956",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/z9956/my-didact/issues"
+  },
+  "homepage": "https://github.com/z9956/my-didact#readme"
+}
