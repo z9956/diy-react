@@ -12,18 +12,18 @@
   const root = document.querySelector('#root')
 
   const element = {
-    type: "div",
+    type: 'div',
     props: {
-      id: "container",
+      id: 'container',
       children: [
-        { type: "input", props: { value: "foo", type: "text" } },
-        { type: "a", props: { href: "/bar" } },
-        { type: "span", props: {} }
+        { type: 'input', props: { value: 'foo', type: 'text' } },
+        { type: 'a', props: { href: '/bar' } },
+        { type: 'span', props: {} }
       ]
     }
-  };
+  }
 
-  render(element, root);
+  render(element, root)
 </script>
 </body>
 </html>
