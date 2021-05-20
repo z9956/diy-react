@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<div id="root">hello world</div>
-<script type="module">
-  import { render } from './index.js'
+	<head>
+		<meta charset="UTF-8" />
+		<title>Title</title>
+	</head>
+	<body>
+		<div id="root">hello world</div>
+		<script type="module">
+			import { render } from './index.js';
 
-  const root = document.querySelector('#root')
+			const root = document.querySelector('#root');
 
-  const element = {
-    type: 'div',
-    props: {
-      id: 'container',
-      children: [
-        { type: 'input', props: { value: 'foo', type: 'text' } },
-        { type: 'a', props: { href: '/bar' } },
-        { type: 'span', props: {} }
-      ]
-    }
-  }
+			const element = {
+				type: 'div',
+				props: {
+					id: 'container',
+					children: [
+						{ type: 'input', props: { value: 'foo', type: 'text' } },
+						{
+							type: 'img',
+							props: {
+								src:
+									'https://tse1-mm.cn.bing.net/th?id=OIP._S9AReGNMmBZ2eGcHlSr-gHaEo&w=145&h=100&c=8&rs=1&qlt=90&pid=3.1&rm=2',
+							},
+						},
+						{ type: 'span', props: {} },
+					],
+				},
+			};
 
-  render(element, root)
-</script>
-</body>
+			render(element, root);
+		</script>
+	</body>
 </html>
