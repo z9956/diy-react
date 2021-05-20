@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="root">hello world</div>
+<script type="module" src="./index.js">
+  import { render } from './index.js';
+  const root = document.querySelector('#root');
+
+  const element = {
+    type: "div",
+    props: {
+      id: "container",
+      children: [
+        { type: "input", props: { value: "foo", type: "text" } },
+        { type: "a", props: { href: "/bar" } },
+        { type: "span", props: {} }
+      ]
+    }
+  };
+
+  render(element, root);
+</script>
+</body>
+</html>
