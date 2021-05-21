@@ -1,7 +1,7 @@
 const CHILDREN = 'children';
-export const TEXT_ELEMENT = 'TEXT ELEMENT';
+const TEXT_ELEMENT = 'TEXT ELEMENT';
 
-export const render = (element, parentDom) => {
+const render = (element, parentDom) => {
 	const { type, props } = element;
 
 	const isTextElement = type === TEXT_ELEMENT;
@@ -29,3 +29,22 @@ export const render = (element, parentDom) => {
 
 	parentDom.appendChild(dom);
 };
+
+const createTextElement = (value) => {
+	return createElement(TEXT_ELEMENT, { nodeValue: value });
+};
+
+const createElement = (type, config, ...args) => {
+	const props = { ...config };
+	const hasChildren = args?.length > 0;
+
+	const rawChildren = (props.children = hasChildren ? [...args] : []);
+
+	props.children = rawChildren
+		.filter((attr) => attr)
+		.map((attr) => (attr instanceof Object ? attr : createTextElement(attr)));
+
+	return { type, props };
+};
+
+export { render };
