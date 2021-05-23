@@ -9,14 +9,16 @@ const render = (element, container) => {
 };
 
 const reconcile = (parentDom, instance, element) => {
-	const newInstance = instantiate(element);
-
 	if (instance == null) {
+		const newInstance = instantiate(element);
 		parentDom.appendChild(newInstance.dom);
-	} else if (element === null) {
+		return newInstance;
+	} else if (element == null) {
+		//=== 情况下，无法删除元素
 		parentDom.removeChild(instance.dom);
 		return null;
 	} else if (instance.element.type !== element.type) {
+		const newInstance = instantiate(element);
 		parentDom.replaceChild(newInstance.dom, instance.dom);
 		return newInstance;
 	} else if (typeof element.type === 'string') {
@@ -29,15 +31,13 @@ const reconcile = (parentDom, instance, element) => {
 	} else {
 		instance.publicInstance.props = element.props;
 		const childElement = instance.publicInstance.render();
-		const oldChildInstance = instance.childInstances;
-		const childInstances = reconcile(parentDom, oldChildInstance, childElement);
-
-		//update dom instances element
-		instance.dom = childInstances.dom;
-		instance.childInstances = childInstances.childInstances;
-		instance.element = childInstances.element;
+		const oldChildInstance = instance.childInstance;
+		const childInstance = reconcile(parentDom, oldChildInstance, childElement);
+		instance.dom = childInstance.dom;
+		instance.childInstance = childInstance;
+		instance.element = element;
+		return instance;
 	}
-	return newInstance;
 };
 
 const reconcileChildren = (instance, element) => {
@@ -128,7 +128,7 @@ const createElement = (type, config, ...args) => {
 	const props = { ...config };
 	const hasChildren = args?.length > 0;
 
-	const rawChildren = (props.children = hasChildren ? [...args] : []);
+	const rawChildren = hasChildren ? [].concat(...args) : [];
 
 	props.children = rawChildren
 		.filter((attr) => attr)
@@ -145,7 +145,7 @@ class Component {
 
 	setState(partialState) {
 		this.state = Object.assign({}, this.state, partialState);
-		updateInstance(this._internalInstance);
+		updateInstance(this.__internalInstance);
 	}
 }
 
@@ -160,7 +160,7 @@ const createPublicInstance = (element, internalInstance) => {
 	const { type, props } = element;
 	const publicInstance = new type(props);
 
-	publicInstance._internalInstance = internalInstance;
+	publicInstance.__internalInstance = internalInstance;
 	return publicInstance;
 };
 

@@ -1,20 +1,16 @@
 {
-  "name": "diy-react",
-  "version": "1.0.0",
-  "description": "",
-  "main": "./index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/z9956/my-didact.git"
-  },
-  "author": "z9956",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/z9956/my-didact/issues"
-  },
-  "homepage": "https://github.com/z9956/my-didact#readme"
+	"name": "diy-react",
+	"version": "0.0.0",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"serve": "vite preview"
+	},
+	"dependencies": {
+	},
+	"devDependencies": {
+		"@vitejs/plugin-react-refresh": "^1.1.0",
+		"typescript": "^4.1.2",
+		"vite": "^2.3.3"
+	}
 }
