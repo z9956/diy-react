@@ -23,27 +23,35 @@ const createTextElement = (text) => {
 	};
 };
 
-const render = (element, container) => {
+const createDom = (fiber) => {
 	const dom =
-		element.type === TEXT_ELEMENT
+		fiber.type === TEXT_ELEMENT
 			? document.createTextNode('')
-			: document.createElement(element.type);
+			: document.createElement(fiber.type);
 
 	const isProperty = (key) => key !== CHILDREN;
 
-	Object.keys(element.props)
+	Object.keys(fiber.props)
 		.filter(isProperty)
 		.forEach((name) => {
-			dom[name] = element.props[name];
+			dom[name] = fiber.props[name];
 		});
 
-	element.props.children.forEach((child) => {
-		render(child, dom);
-	});
-	container.appendChild(dom);
+	return dom;
+};
+
+const render = (element, container) => {
+	wipRoot = {
+		dom: container,
+		props: {
+			children: [element],
+		},
+	};
+	nextUnitOfWork = wipRoot;
 };
 
 let nextUnitOfWork = null;
+let wipRoot = null;
 
 const workLoop = (deadline) => {
 	let shouldYield = false;
@@ -52,11 +60,68 @@ const workLoop = (deadline) => {
 		nextUnitOfWork = performUnitOfWork(nextUnitOfWork);
 		shouldYield = deadline.timeRemaining() < 1;
 	}
+	if (!nextUnitOfWork && wipRoot) {
+		commitRoot();
+	}
 	requestIdleCallback(workLoop);
 };
 
 requestIdleCallback(workLoop);
 
-const performUnitOfWork = (nextUnitOfWork) => {};
+const commitRoot = () => {
+	commitWork(wipRoot.child);
+	wipRoot = null;
+};
+
+const commitWork = (fiber) => {
+	if (!fiber) return;
+
+	const domParent = fiber.parent.dom;
+	domParent.appendChild(fiber.dom);
+	commitWork(fiber.child);
+	commitWork(fiber.sibling);
+};
+
+const performUnitOfWork = (fiber) => {
+	if (!fiber.dom) {
+		fiber.dom = createDom(fiber);
+	}
+
+	const elements = fiber.props.children;
+	let index = 0;
+	let prevSibling = null;
+
+	while (index < elements.length) {
+		const element = elements[index];
+
+		const newFiber = {
+			type: element.type,
+			props: element.props,
+			parent: fiber,
+			dom: null,
+		};
+
+		if (index === 0) {
+			fiber.child = newFiber;
+		} else {
+			prevSibling.sibling = newFiber;
+		}
+
+		prevSibling = newFiber;
+		index++;
+	}
+
+	if (fiber.child) {
+		return fiber.child;
+	}
+
+	let nextFiber = fiber;
+	while (nextFiber) {
+		if (nextFiber.sibling) {
+			return nextFiber.sibling;
+		}
+		nextFiber = nextFiber.parent;
+	}
+};
 
 export { render, createElement };
