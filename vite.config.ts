@@ -5,6 +5,6 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [reactRefresh()],
 	esbuild: {
-		jsxInject: `import { createElement } from './didact.js'`,
+		// jsxInject: `import { createElement } from './didact.js'`,
 	},
 });
